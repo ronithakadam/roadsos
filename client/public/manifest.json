@@ -1,0 +1,16 @@
+{
+  "short_name": "RoadSOS",
+  "name": "RoadSOS Emergency Response",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#6b3a1f",
+  "background_color": "#1a0f0a",
+  "description": "Emergency response system for road accidents"
+}

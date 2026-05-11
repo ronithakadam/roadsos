@@ -1,0 +1,23 @@
+@import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #f3e5d0;
+  color: #3e2b1f;
+  overflow-x: hidden;
+}
+
+/* Mobile friendly */
+@media (max-width: 600px) {
+  input, button {
+    font-size: 16px !important;
+  }
+}
