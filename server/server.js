@@ -12,7 +12,10 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected!'))
-  .catch(err => console.log('MongoDB error:', err.message))
+  .catch(err => {
+    console.log('MongoDB error:', err.message)
+    console.log('Running without MongoDB...')
+  })
 
 const chatSchema = new mongoose.Schema({
   role: String,
