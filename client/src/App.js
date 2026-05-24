@@ -82,7 +82,7 @@ function App() {
   }
 
   const fetchNearbyPlaces = async (coords) => {
-    const res = await fetch(`http://localhost:5000/nearby?lat=${coords.lat}&lng=${coords.lng}`)
+    const res = await fetch(`https://roadsos-server.onrender.com/nearby?lat=${coords.lat}&lng=${coords.lng}`)
     const data = await res.json()
     setPlaces(data.places || [])
   }
@@ -90,7 +90,7 @@ function App() {
   const fetchFirstAid = async (type) => {
     setFirstAidLoading(true)
     setFirstAidSteps('')
-    const res = await fetch(`http://localhost:5000/firstaid?type=${type}`)
+    const res = await fetch(`https://roadsos-server.onrender.com/firstaid?type=${type}`)
     const data = await res.json()
     setFirstAidSteps(data.steps)
     setFirstAidLoading(false)
@@ -105,7 +105,7 @@ function App() {
     setInput('')
     setLoading(true)
     setActiveTab('chat')
-    const response = await fetch('http://localhost:5000/chat', {
+    const response = await fetch('https://roadsos-server.onrender.com/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: fullMessage, location })
