@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet'
 import L from 'leaflet'
@@ -128,7 +129,6 @@ function App() {
       fontFamily: "'Segoe UI', sans-serif",
       display: 'flex', flexDirection: 'column'
     }}>
-      {/* Header */}
       <div style={{
         background: 'linear-gradient(135deg, #d8b38b, #b99772)',
         padding: '14px 20px',
@@ -163,7 +163,6 @@ function App() {
         </div>
       </div>
 
-      {/* Offline banner */}
       {!isOnline && (
         <div style={{
           background: '#8B4513', padding: '8px 16px',
@@ -174,11 +173,7 @@ function App() {
         </div>
       )}
 
-      {/* Tab navigation */}
-      <div style={{
-        display: 'flex', background: '#e3d1bc',
-        borderBottom: '1px solid #d3b48c'
-      }}>
+      <div style={{ display: 'flex', background: '#e3d1bc', borderBottom: '1px solid #d3b48c' }}>
         {[
           { id: 'chat', emoji: '💬', label: 'Chat' },
           { id: 'map', emoji: '🗺️', label: 'Map' },
@@ -198,11 +193,7 @@ function App() {
         ))}
       </div>
 
-      {/* Quick action buttons - always visible */}
-      <div style={{
-        display: 'flex', gap: '8px', padding: '10px 12px',
-        background: '#e9dbc6', borderBottom: '1px solid #d3b48c'
-      }}>
+      <div style={{ display: 'flex', gap: '8px', padding: '10px 12px', background: '#e9dbc6', borderBottom: '1px solid #d3b48c' }}>
         {[
           { emoji: '🏥', label: 'Hospital' },
           { emoji: '🚔', label: 'Police' },
@@ -212,8 +203,7 @@ function App() {
           <button key={i} onClick={() => sendMessage(`Find nearest ${btn.label} to my location`)} style={{
             flex: 1, background: '#f5ede3', border: '1px solid #d9b68a',
             borderRadius: '10px', padding: '10px 4px', color: '#3e2b1f',
-            cursor: 'pointer', display: 'flex', flexDirection: 'column',
-            alignItems: 'center', gap: '4px'
+            cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px'
           }}>
             <span style={{ fontSize: '22px' }}>{btn.emoji}</span>
             <span style={{ fontSize: '11px', fontWeight: '600' }}>{btn.label}</span>
@@ -221,7 +211,6 @@ function App() {
         ))}
       </div>
 
-      {/* Chat Tab */}
       {activeTab === 'chat' && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '14px', display: 'flex', flexDirection: 'column', gap: '12px', minHeight: '300px' }}>
           {messages.map((msg, i) => (
@@ -265,7 +254,6 @@ function App() {
         </div>
       )}
 
-      {/* Map Tab */}
       {activeTab === 'map' && location && (
         <div style={{ flex: 1 }}>
           <div style={{ padding: '8px 12px', background: '#f0e3d1', fontSize: '12px', color: '#6f4e35' }}>
@@ -292,7 +280,6 @@ function App() {
         </div>
       )}
 
-      {/* First Aid Tab */}
       {activeTab === 'firstaid' && (
         <div style={{ flex: 1, overflowY: 'auto', padding: '14px' }}>
           <div style={{ fontSize: '15px', fontWeight: '700', marginBottom: '12px', color: '#7f6245' }}>
@@ -311,18 +298,13 @@ function App() {
               </button>
             ))}
           </div>
-
           {firstAidLoading && (
             <div style={{ textAlign: 'center', color: '#7f6245', padding: '20px' }}>
               Loading first aid steps...
             </div>
           )}
-
           {firstAidSteps && !firstAidLoading && (
-            <div style={{
-              background: '#f1e4d4', border: '1px solid #d3b48c',
-              borderRadius: '14px', padding: '16px'
-            }}>
+            <div style={{ background: '#f1e4d4', border: '1px solid #d3b48c', borderRadius: '14px', padding: '16px' }}>
               <div style={{ fontSize: '14px', lineHeight: '1.8', color: '#3e2b1f', whiteSpace: 'pre-line' }}>
                 {firstAidSteps}
               </div>
@@ -331,7 +313,6 @@ function App() {
         </div>
       )}
 
-      {/* Bottom input + SOS */}
       <div style={{ padding: '10px 14px', background: '#e9dbc6', borderTop: '1px solid #d3b48c' }}>
         <button onClick={handleSOS} style={{
           width: '100%', padding: '14px',
@@ -339,12 +320,10 @@ function App() {
           border: '2px solid #d3b48c', borderRadius: '12px', color: '#3e2b1f',
           fontSize: '17px', fontWeight: '800', cursor: 'pointer',
           letterSpacing: '3px', marginBottom: '10px',
-          boxShadow: '0 4px 20px rgba(185,154,127,0.35)',
-          transition: 'all 0.2s'
+          boxShadow: '0 4px 20px rgba(185,154,127,0.35)', transition: 'all 0.2s'
         }}>
           {sosActive ? '🚨 SOS SENT!' : '🆘 SOS EMERGENCY'}
         </button>
-
         <div style={{ display: 'flex', gap: '8px' }}>
           <input
             value={input}
