@@ -51,6 +51,7 @@ function App() {
   const [firstAidLoading, setFirstAidLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('chat')
   const [locStatus, setLocStatus] = useState('detecting')
+  const [language, setLanguage] = useState('en')
   const [sosActive, setSosActive] = useState(false)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const messagesEndRef = useRef(null)
@@ -101,7 +102,11 @@ function App() {
     const msg = customMessage || input
     if (!msg.trim()) return
     const locationText = location ? `User location: Lat ${location.lat.toFixed(4)}, Lng ${location.lng.toFixed(4)}.` : ''
-    const fullMessage = locationText + ' ' + msg
+    const languageInstruction = language === 'en' ? 'Reply in English.' :
+      language === 'hi' ? 'Reply in Hindi (हिंदी).' :
+      language === 'kn' ? 'Reply in Kannada (ಕನ್ನಡ).' :
+      'Reply in Tamil (தமிழ்).'
+    const fullMessage = locationText + ' ' + msg + ' ' + languageInstruction
     setMessages(prev => [...prev, { role: 'user', text: msg }])
     setInput('')
     setLoading(true)
@@ -161,6 +166,27 @@ function App() {
             ? `${location.lat.toFixed(3)}, ${location.lng.toFixed(3)}`
             : locStatus === 'detecting' ? 'Detecting...' : 'Denied'}
         </div>
+      </div> {/* Language selector */}
+      <div style={{
+        display: 'flex', gap: '6px', padding: '8px 16px',
+        background: '#e9dbc6', borderBottom: '1px solid #d3b48c',
+        justifyContent: 'center'
+      }}>
+        {[
+          { code: 'en', label: '🇬🇧 English' },
+          { code: 'hi', label: '🇮🇳 हिंदी' },
+          { code: 'kn', label: '🇮🇳 ಕನ್ನಡ' },
+          { code: 'ta', label: '🇮🇳 தமிழ்' },
+        ].map(lang => (
+          <button key={lang.code} onClick={() => setLanguage(lang.code)} style={{
+            padding: '5px 12px', borderRadius: '20px', fontSize: '12px',
+            border: `1px solid ${language === lang.code ? '#a57c52' : '#d3b48c'}`,
+            background: language === lang.code ? '#d1b38d' : '#f5ede3',
+            color: '#3e2b1f', cursor: 'pointer', fontWeight: language === lang.code ? '700' : '400'
+          }}>
+            {lang.label}
+          </button>
+        ))}
       </div>
 
       {!isOnline && (
