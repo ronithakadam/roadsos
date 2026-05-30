@@ -49,6 +49,12 @@ function App() {
   const [showFirstAid, setShowFirstAid] = useState(false)
   const [firstAidSteps, setFirstAidSteps] = useState('')
   const [firstAidLoading, setFirstAidLoading] = useState(false)
+  const [report, setReport] = useState({
+    name: '', phone: '', location: '', description: '',
+    vehicleNumber: '', injuries: ''
+  })
+  const [reportSubmitted, setReportSubmitted] = useState(false)
+  const [reportLoading, setReportLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('chat')
   const [locStatus, setLocStatus] = useState('detecting')
   const [language, setLanguage] = useState('en')
@@ -119,6 +125,25 @@ function App() {
     const data = await response.json()
     setMessages(prev => [...prev, { role: 'bot', text: data.reply }])
     setLoading(false)
+  }
+
+  const submitReport = async () => {
+    setReportLoading(true)
+    try {
+      const locationText = location ? `Lat ${location.lat.toFixed(4)}, Lng ${location.lng.toFixed(4)}` : report.location
+      const res = await fetch('https://roadsos-server.onrender.com/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...report, location: locationText })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setReportSubmitted(true)
+      }
+    } catch (error) {
+      console.error('Report error:', error)
+    }
+    setReportLoading(false)
   }
 
   const handleSOS = () => {
@@ -204,6 +229,7 @@ function App() {
           { id: 'chat', emoji: '💬', label: 'Chat' },
           { id: 'map', emoji: '🗺️', label: 'Map' },
           { id: 'firstaid', emoji: '🩺', label: 'First Aid' },
+          { id: 'report', emoji: '📋', label: 'Report' },
         ].map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
             flex: 1, padding: '12px 8px',
@@ -334,6 +360,110 @@ function App() {
               <div style={{ fontSize: '14px', lineHeight: '1.8', color: '#3e2b1f', whiteSpace: 'pre-line' }}>
                 {firstAidSteps}
               </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Report Tab */}
+      {activeTab === 'report' && (
+        <div style={{ flex: 1, overflowY: 'auto', padding: '14px' }}>
+          {reportSubmitted ? (
+            <div style={{
+              textAlign: 'center', padding: '40px 20px',
+              background: '#f1e4d4', borderRadius: '16px',
+              border: '1px solid #d3b48c'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
+              <div style={{ fontSize: '18px', fontWeight: '700', color: '#3e2b1f', marginBottom: '8px' }}>
+                Report Submitted!
+              </div>
+              <div style={{ fontSize: '14px', color: '#7f6245' }}>
+                Your accident report has been saved. You can share this with police or insurance.
+              </div>
+              <button onClick={() => { setReportSubmitted(false); setReport({ name: '', phone: '', location: '', description: '', vehicleNumber: '', injuries: '' }) }} style={{
+                marginTop: '20px', padding: '10px 24px',
+                background: 'linear-gradient(135deg, #d8b38b, #b99772)',
+                border: 'none', borderRadius: '10px', color: '#3e2b1f',
+                cursor: 'pointer', fontWeight: '700', fontSize: '14px'
+              }}>
+                New Report
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', color: '#7f6245' }}>
+                📋 Accident Report Form
+              </div>
+
+              {[
+                { key: 'name', label: 'Your Name', placeholder: 'Enter your full name' },
+                { key: 'phone', label: 'Phone Number', placeholder: 'Enter your phone number' },
+                { key: 'vehicleNumber', label: 'Vehicle Number', placeholder: 'e.g. KA 09 AB 1234' },
+                { key: 'injuries', label: 'Injuries', placeholder: 'Describe any injuries' },
+              ].map(field => (
+                <div key={field.key} style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '13px', fontWeight: '600', color: '#7f6245', marginBottom: '4px' }}>
+                    {field.label}
+                  </div>
+                  <input
+                    value={report[field.key]}
+                    onChange={e => setReport(prev => ({ ...prev, [field.key]: e.target.value }))}
+                    placeholder={field.placeholder}
+                    style={{
+                      width: '100%', padding: '10px 14px', borderRadius: '10px',
+                      border: '1px solid #d3b48c', background: '#f7efe3',
+                      color: '#3e2b1f', fontSize: '14px', outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+                </div>
+              ))}
+
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: '#7f6245', marginBottom: '4px' }}>
+                  Location
+                </div>
+                <input
+                  value={location ? `Lat ${location.lat.toFixed(4)}, Lng ${location.lng.toFixed(4)}` : report.location}
+                  onChange={e => setReport(prev => ({ ...prev, location: e.target.value }))}
+                  placeholder="Location of accident"
+                  style={{
+                    width: '100%', padding: '10px 14px', borderRadius: '10px',
+                    border: '1px solid #d3b48c', background: '#f7efe3',
+                    color: '#3e2b1f', fontSize: '14px', outline: 'none',
+                    boxSizing: 'border-box'
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ fontSize: '13px', fontWeight: '600', color: '#7f6245', marginBottom: '4px' }}>
+                  Accident Description
+                </div>
+                <textarea
+                  value={report.description}
+                  onChange={e => setReport(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="Describe what happened..."
+                  rows={4}
+                  style={{
+                    width: '100%', padding: '10px 14px', borderRadius: '10px',
+                    border: '1px solid #d3b48c', background: '#f7efe3',
+                    color: '#3e2b1f', fontSize: '14px', outline: 'none',
+                    boxSizing: 'border-box', resize: 'none', fontFamily: 'inherit'
+                  }}
+                />
+              </div>
+
+              <button onClick={submitReport} disabled={reportLoading} style={{
+                width: '100%', padding: '14px',
+                background: 'linear-gradient(135deg, #d8b38b, #b99772)',
+                border: '2px solid #d3b48c', borderRadius: '12px', color: '#3e2b1f',
+                fontSize: '16px', fontWeight: '800', cursor: 'pointer',
+                opacity: reportLoading ? 0.7 : 1
+              }}>
+                {reportLoading ? 'Submitting...' : '📋 Submit Report'}
+              </button>
             </div>
           )}
         </div>
