@@ -128,5 +128,35 @@ app.get('/firstaid', async (req, res) => {
   }
 })
 
+const reportSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+  location: String,
+  description: String,
+  vehicleNumber: String,
+  injuries: String,
+  createdAt: { type: Date, default: Date.now }
+})
+const Report = mongoose.model('Report', reportSchema)
+
+app.post('/report', async (req, res) => {
+  try {
+    const report = await Report.create(req.body)
+    console.log('Report saved:', report._id)
+    res.json({ success: true, reportId: report._id })
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message })
+  }
+})
+
+app.get('/reports', async (req, res) => {
+  try {
+    const reports = await Report.find().sort({ createdAt: -1 }).limit(10)
+    res.json({ reports })
+  } catch (error) {
+    res.status(500).json({ reports: [] })
+  }
+})
+
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`RoadSOS server running on port ${PORT}`))
